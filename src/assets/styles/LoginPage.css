@@ -1,0 +1,185 @@
+/* Modal Styles */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.login_modal_close_btn,
+.payment_pending_modal_close_btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    background: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #fbbc38 !important;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0 0;
+    color: #000;
+}
+
+.login-btn:hover {
+    background-color: #e4aa2c;
+}
+
+.links {
+    margin-top: 15px;
+}
+
+.forgotPassword_button {
+    text-align: right;
+}
+
+.forgot_password_a_tag,
+.login_button_a_tag {
+    color: #fbbc38;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.forgot_password_a_tag:hover,
+.login_button_a_tag:hover {
+    text-decoration: underline;
+}
+
+.signUp_button {
+    margin-top: 10px;
+    color: #adadad;
+}
+
+.label_text {
+    color: black;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.login_modal_heading,
+.payment_pending_modal_heading{
+    font-weight: 600;
+    color: #000;
+    margin: 5px 0 10px;
+    font-size: 30px;
+    line-height: normal;
+}
+
+.payment_pending_modal_a_tag{
+    color: #fbbc38;
+    overflow: hidden;
+}
+
+.payment_pending_modal_qr_div{
+    display: flex;
+    margin-top: 2rem;
+}
+
+.payment_pending_modal_a_div{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .login-btn {
+        font-size: 14px;
+    }
+
+    .form-group input {
+        font-size: 14px;
+    }
+
+    .payment_pending_modal_qr_div {
+        display: grid;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .form-group input {
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .modal-content {
+        padding: 10px;
+    }
+}
+
+.login-modal-inner h5{
+    color: #adadad;
+}

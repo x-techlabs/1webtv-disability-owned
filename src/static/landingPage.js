@@ -41,7 +41,7 @@ const LandingPageData = {
   //   description: 'Send children on adventures with their favourite characters in a space made just for them—free with your membership.',
   //   image: sectionFiveImage,
   // },
-  section_six: {
+  section_five: {
     // heading: `Get Money Matters Insights From NDI's  Financial Resilience Center `,
     // description: 'Send children on adventures with their favourite characters in a space made just for them—free with your membership.',
     description: `Disability Owned TV features informative videos from the National Disability Institute (NDI).  NDI is the U.S. first national non-profit committed exclusively to financial education and empowerment for people with disabilities. `,
@@ -62,7 +62,7 @@ const LandingPageData = {
   //   description: 'Send children on adventures with their favourite characters in a space made just for them—free with your membership.',
   //   image: sectionNineImage,
   // },
-  section_ten: {
+  section_eleven: {
     // heading: `Watch NDI's 2022 Small Busines Confernece Sessions `,
     // description: 'Send children on adventures with their favourite characters in a space made just for them—free with your membership.',
     description: `Watch Informative Business Development Webinars.`,

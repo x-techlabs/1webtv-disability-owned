@@ -72,7 +72,7 @@ const LiveStreamComponent = ({
       mmvjsPlugin.setDeviceInfo(navigator.userAgent);
       mmvjsPlugin.reportVideoQuality("HD");
 
-      const isLive = liveVideoDetails.isLive === 1 ? "Live" : "VOD";
+      const isLive = liveVideoDetails.is_live === 1 ? true : false;
       const mmVideoAssetInfo = {
         assetName: title,
         assetId: videoId.toString(),

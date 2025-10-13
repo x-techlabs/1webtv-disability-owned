@@ -94,7 +94,7 @@ const SupportPage = ({
             />
             <div className='main-cont support_main_cont'>
                 <div className='support_content'>
-                    <p>We are at your disposal for any technical need or simple assistance. You can fill out the form or write to us at <a href={`mailto:${process.env.REACT_APP_SUPPORT_EMAIL}`} target='_blank' className='support_email_link'>{process.env.REACT_APP_SUPPORT_EMAIL}</a>!</p>
+                    <p>We are at your disposal for any technical need or simple assistance. You can fill out the form or write to us at <a href={`mailto:${process.env.REACT_APP_SUPPORT_EMAIL}`} target='_blank' className='support_email_link' rel="noreferrer">{process.env.REACT_APP_SUPPORT_EMAIL}</a>!</p>
                 </div>
                 <div className="form-wrapper">
                     <h1 className='text-center support_heading'>Support Form</h1>

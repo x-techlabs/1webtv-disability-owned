@@ -44,6 +44,8 @@ const EpisodesTabs = ({ episodes }) => {
                                         <Link
                                             to={`/watch/featured/${encodeURIComponent(ep.title)}`}
                                             className="btn" type='button'
+                                            aria-label={`${ep.title}`}
+                                            onClick={sessionStorage.setItem("user_interacted", true)}
                                         >
                                             Play
                                         </Link>

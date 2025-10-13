@@ -10,7 +10,7 @@ const LoginModal = ({ closeModal, onLoginSuccess }) => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    const rayd8_connect_url = process.env.REACT_APP_RAYD8_CONNECT;
+    const disability_owned_url = process.env.REACT_APP_DISABILITY_OWNED;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,14 +81,14 @@ const LoginModal = ({ closeModal, onLoginSuccess }) => {
                 </div>
 
                 <div className="forgotPassword_button">
-                    <a href={`${rayd8_connect_url}/forgot-password`} className="forgot_password_a_tag" target='_blank' rel="noreferrer">Forgot Password?</a>
+                    <a href={`${disability_owned_url}/forgot-password`} className="forgot_password_a_tag" target='_blank' rel="noreferrer">Forgot Password?</a>
                 </div>
 
                 <button type="submit" className="login-btn">Login</button>
 
                 <div className="links">                    
                     <div className="signUp_button">
-                        Don't have an account? Create new account <a href={`${rayd8_connect_url}/register`} className="login_button_a_tag" target='_blank' rel="noreferrer">here</a>
+                        Don't have an account? Create new account <a href={`${disability_owned_url}/register`} className="login_button_a_tag" target='_blank' rel="noreferrer">here</a>
                     </div>
                 </div>
             </form>

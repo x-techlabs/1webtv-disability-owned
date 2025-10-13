@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { VIDEO_TYPES } from '../../config/const.config';
 import convertSecToTime from '../../utils/timeformat.util';
-import landscape_dummy_poster from "../../assets/images/landscape_dummy_poster.png";
-import portrait_dummy_poster from "../../assets/images/portrait_dummy_poster.png";
 
 const Series = ({
     id: seriesId,
@@ -30,13 +28,13 @@ const Series = ({
     const getactiveSubPage = localStorage.getItem('pageSubClick');
     const pageSubClick = getactiveSubPage ? getactiveSubPage : activeSubPage;
 
-    const fallbackImage = (error, titleName, isPortrait) => {
-        if (error?.target) {
-            error.target.src = isPortrait ? portrait_dummy_poster : landscape_dummy_poster;
-            error.target.alt = titleName;
-            error.target.className = isPortrait ? 'error-image-default-image portrait' : 'error-image-default-image landscape';
+    const fallbackImage = (error, titleName) => {
+        const err = { ...error };
+        const errorElement = window.document.getElementById(err.target.id);
+        if (errorElement !== null) {
+            errorElement.outerHTML = `<div className="error-text-img"><div className="error-title">${titleName}<div></div>`;
         }
-        return error;
+        return err;
     };
 
     return (
@@ -64,7 +62,6 @@ const Series = ({
                         activeSubPage
                     });
                 }}
-                role="none"
             >
                 <div className="img">                    
                     <div className="overlay-box">
@@ -78,7 +75,6 @@ const Series = ({
                             id={`target-image-h-v-${seriesId}`}
                             src={poster}
                             alt={title}
-                            loading="lazy"
                             onError={(error) => fallbackImage(error, title)}
                         />
                     </div>

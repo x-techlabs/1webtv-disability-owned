@@ -57,7 +57,7 @@ const SeriesDetailPageWrapper = ({ activePage, menuData, activePageLayout, handl
             }
 
             const seriesDatas = await seriesEpisodeData(activePage, seriesPlaylistId, gridvId);
-            const seriesDetails = seriesDatas.content.series
+            const seriesDetails = seriesDatas.content.series;
             const formattedSeries = seriesDetails.map((s) => ({
               id: s._id,
               title: s.title,
@@ -68,6 +68,7 @@ const SeriesDetailPageWrapper = ({ activePage, menuData, activePageLayout, handl
               release_date: s.release_date,
               episodes: s.episodes,
               type: program_type,
+              isPortrait: program_type === 'video' ? false : true,
             }));
            
             if (formattedSeries.length === 0) {
@@ -78,12 +79,12 @@ const SeriesDetailPageWrapper = ({ activePage, menuData, activePageLayout, handl
             setVideoData(formattedSeries[0]?.episode);
           } catch (error) {
             navigate(`/`, { replace: true });
-            console.error('Error fetching detail data:', error);
+            // console.error('Error fetching detail data:', error);
           }
       };
   
       fetchData();
-    }, []);
+    }, [activePage, navigate]);
   
     if (!seriesDetails) {
       return <Loading showVideo={false} />;

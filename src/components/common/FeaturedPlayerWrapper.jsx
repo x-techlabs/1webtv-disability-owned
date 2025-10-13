@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { getUserVideoProgress, getLocalStorageData } from '../../utils/localCache.util';
@@ -14,7 +15,6 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
     const [currentProgress, setCurrentProgress] = useState(0);
     const [subPage, setSubPage] = useState("");
     const location = useLocation();
-    const activeSubPageParentId = location.state?.activeSubPageParent;
 
     const playFromBeginning = location.state?.play_from_beginning;
 
@@ -43,8 +43,8 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
                 }
                 
                 const menuData = await getMenuDetails(playlistId);
-                const matchingPlaylist = menuData?.content?.playlists?.find(
-                    (playlist) => String(playlist._id) === String(rawVideos[0].playlist_id)
+                const matchingPlaylist = menuData?.content?.playlists?.find((playlist) =>
+                  rawVideos.some((video) => String(playlist._id) === String(video.playlist_id))
                 );
                 const program_type = matchingPlaylist?.program_type ?? 'video';
 
@@ -79,6 +79,7 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
                     playDirectUrl: v.playDirectUrl || '',
                     liveVastUrl: v.liveVastUrl || '',
                     type: program_type,
+                    content_type: v.content_type,
                     monetization_type: v.monetizationDetails?.type || "Free",
                     monetization_price: v.monetizationDetails?.price || 0,
                     monetization_duration: v.monetizationDetails?.duration || '',
@@ -96,7 +97,7 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
                   }
                 //setCurrentProgress(myProgress);
             } catch (error) {
-                console.error('Error fetching detail data:', error);
+                // console.error('Error fetching detail data:', error);
                 setErrorRedirect(true);
             }
         };

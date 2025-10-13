@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 const DynamicPage = ({ menuData, activePage, activePageLayout, handlePageChange }) => {
   const { playlistTitle } = useParams();
-  const decodedTitle = decodeURIComponent(playlistTitle);
+  const decodedTitle = decodeURIComponent(playlistTitle === undefined ? encodeURIComponent(menuData[0].title) : playlistTitle);
   const [iframeData, setIframeData] = useState(null);
 
   useEffect(() => {
@@ -20,14 +20,14 @@ const DynamicPage = ({ menuData, activePage, activePageLayout, handlePageChange 
           setIframeData(matched || null);
         }
       } catch (error) {
-        console.error("Error fetching iframe details:", error);
+        // console.error("Error fetching iframe details:", error);
       }
     };
 
     fetchData();
   }, [decodedTitle]);
 
-  if (iframeData) {
+  if (iframeData !== null) {
     return (
       <IframePage
         urlTitle={iframeData.name}

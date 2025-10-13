@@ -2,22 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/splash-logo.png" />
+    <link rel="preconnect" rel="icon" href="%PUBLIC_URL%/splash-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#000000" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/splash-logo.png" />
+    <link rel="preconnect" rel="apple-touch-icon" href="%PUBLIC_URL%/splash-logo.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Disability Owned</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="https://sdk.mediamelon.com/SDK_RELEASES/Javascript/2025-01-27/mmsmartstreaming_videojsplayer.min.js"></script>
+    <title>Disability Owned</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js" defer></script>
+    <script type="text/javascript" src="https://sdk.mediamelon.com/SDK_RELEASES/Javascript/2025-01-27/mmsmartstreaming_videojsplayer.min.js" defer></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
-  <script src="https://bradm.ax/build/202504/10/f4825a332129547ac2cf814aeff5c2571b95c7e0/player.js" type="text/javascript" data-bs-parent-id="player" data-bs-variables="eyJkYXRhUHJvdmlkZXIiOnsic291cmNlIjpbeyJ1cmwiOiJodHRwczovL2JyYWRtYXguY29tL3N0YXRpYy92aWRlby90ZWFyc19vZl9zdGVlbC5tcDQifV0sInRpdGxlIjoiVGVhcnMgb2Ygc3RlZWwiLCJkdXJhdGlvbiI6NzM0LjA5NzQxNSwic3BsYXNoSW1hZ2VzIjpbeyJ1cmwiOiJodHRwczovL2JyYWRtYXguY29tL3N0YXRpYy9pbWFnZXMvc3RhcnRzcGxhc2guanBnIn1dfX0="></script>
   <script>
     function setAppHeight() {
       const doc = document.documentElement;
@@ -26,5 +25,23 @@
     window.addEventListener('resize', setAppHeight);
     window.addEventListener('orientationchange', setAppHeight);
     setAppHeight();
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const USPrivacy_String = getCookie("usprivacy");
+    // console.log("USPrivacy_String:", USPrivacy_String);
+
+    if (USPrivacy_String && USPrivacy_String.length === 4) {
+      const optOutSale = USPrivacy_String.charAt(2);
+      if (optOutSale === "Y") {
+        // console.log(":white_check_mark: User opted OUT of Sale (DNT active).");
+      } else if (optOutSale === "N") {
+        // console.log(":x: User did NOT opt out (Sale allowed).");
+      }
+    }
   </script>
 </html>

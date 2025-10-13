@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-param-reassign */
@@ -37,7 +38,6 @@ const SeriesHorizontalList = ({
     const [page, setPage] = useState(1);
     const [currentUrl, setCurrentUrl] = useState(location.pathname);
     const hasSaved = useRef(false);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 425);
 
     useEffect(() => {
         if (!hasSaved.current) {
@@ -89,15 +89,6 @@ const SeriesHorizontalList = ({
         }
     }, [activePage, activeSubPage]);
 
-    useEffect(() => {
-        const handleResize = () => {
-          setIsMobileView(window.innerWidth <= 425);
-        };
-      
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
     const handleShowDetailPage = (data) => {
         if (window.document.getElementById('resume-btn')) {
             window.document.getElementById('resume-btn').classList.add('focused');
@@ -146,9 +137,9 @@ const SeriesHorizontalList = ({
                             {title}
                         </div>
 
-                        {currentUrl !== "/search" && (
+                        {currentUrl !== "/search" && series.length > 20 && (
                             <Link to={`/series/details/${encodeURIComponent(title)}`} className='see_more_options' id={type}>
-                                See More {isMobileView ? '' : title}
+                                See More
                             </Link>
                         )}
                     </div>

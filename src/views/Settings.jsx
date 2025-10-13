@@ -8,7 +8,7 @@ const Settings = ({ menuData, activePage, handlePageChange }) => {
   const subMenuData = [
     {
       id: 'about',
-      title: 'About HBCUgo',
+      title: 'About Disability Owned',
     },
     {
       id: 'terms',
@@ -36,24 +36,24 @@ const Settings = ({ menuData, activePage, handlePageChange }) => {
     'https://chart.googleapis.com/chart?cht=qr&chs=345x345&chld=L%7C1&chl=';
   const subMenuInfo = {
     about: {
-      text: 'To learn more about HBCUgo.TV, please visit the URL below or scan the QR code:',
-      url: 'hbcugo.tv/about',
-      qrcode: `${qrcodeBase}${encodeURIComponent('hbcugo.tv/about')}`,
+      text: 'To learn more about Disability Owned.COM, please visit the URL below or scan the QR code:',
+      url: 'disabilityowned.com/about',
+      qrcode: `${qrcodeBase}${encodeURIComponent('disabilityowned.com/about')}`,
     },
     terms: {
       text: 'To view our terms & conditions, please visit the URL below or scan the QR code:',
-      url: 'hbcugo.tv/terms-of-use',
-      qrcode: `${qrcodeBase}${encodeURIComponent('hbcugo.tv/terms-of-use')}`,
+      url: 'disabilityowned.com/terms-of-use',
+      qrcode: `${qrcodeBase}${encodeURIComponent('disabilityowned.com/terms-of-use')}`,
     },
     privacy: {
       text: 'To view our privacy policy, please visit the URL below or scan the QR code:',
-      url: 'hbcugo.tv/privacy-policy',
-      qrcode: `${qrcodeBase}${encodeURIComponent('hbcugo.tv/privacy-policy')}`,
+      url: 'disabilityowned.com/privacy-policy',
+      qrcode: `${qrcodeBase}${encodeURIComponent('disabilityowned.com/privacy-policy')}`,
     },
     donotsell: {
       text: 'To view our legal information, please visit the URL below or scan the QR code:',
-      url: 'hbcugo.tv/donotsellmyinfo',
-      qrcode: `${qrcodeBase}${encodeURIComponent('hbcugo.tv/donotsellmyinfo')}`,
+      url: 'disabilityowned.com/donotsellmyinfo',
+      qrcode: `${qrcodeBase}${encodeURIComponent('disabilityowned.com/donotsellmyinfo')}`,
     },
     ccpa: {
       text: 'To view our legal information, please visit the URL below or scan the QR code:',
@@ -62,8 +62,8 @@ const Settings = ({ menuData, activePage, handlePageChange }) => {
     },
     contact: {
       text: 'If you have questions or feedback, please send us an email to the address below:',
-      url: 'support@hbcugo.tv',
-      qrcode: `${qrcodeBase}${encodeURIComponent('support@hbcugo.tv')}`,
+      url: 'support@disabilityowned.com',
+      qrcode: `${qrcodeBase}${encodeURIComponent('support@disabilityowned.com')}`,
     },
   };
 

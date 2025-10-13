@@ -218,6 +218,11 @@ a.link {
 }
 .page-container.main-no-video-show {
   display: flex;
+  /* flex-direction: column; */
+}
+
+.page-container.main-no-video-show.inner-page-grid {
+  flex-direction: column;
 }
 
 /* .page-container .page-content.has-bg-video {
@@ -439,7 +444,6 @@ a.link {
   color: var(--theme-color-text);
   font-size: 28px;
   padding: 0 20px;
-  margin-top: 250px;
 }
 .search-results .loading {
   margin-top: 250px;
@@ -616,5 +620,9 @@ div.video.prj-element.focused img {
 @media (max-width: 992px) {
   .tabs-desktop {
     display: none;
+  }
+
+  .video-container {
+    overflow-y: scroll;
   }
 }

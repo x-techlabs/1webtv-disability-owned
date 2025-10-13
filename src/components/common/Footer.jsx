@@ -16,7 +16,7 @@ const Footer = ({ menuData, handlePageChange, copyRightText }) => {
         const response = footerSetting.content[0];
         setFooterSettingDetails(response);
       } catch (error) {
-        console.error("Error fetching footer settings:", error);
+        // console.error("Error fetching footer settings:", error);
       }
     };
 
@@ -31,6 +31,14 @@ const Footer = ({ menuData, handlePageChange, copyRightText }) => {
 
     const currentPage = location.pathname.replace("/", "") || "Home";
     return topMenu.includes(currentPage);
+  };
+
+  const handleCookieSettingsClick = () => {
+    if (window.OneTrust && typeof window.OneTrust.ToggleInfoDisplay === 'function') {
+      window.OneTrust.ToggleInfoDisplay();
+    } else {
+      // console.warn('OneTrust SDK not loaded yet');
+    }
   };
 
   return (
@@ -55,7 +63,7 @@ const Footer = ({ menuData, handlePageChange, copyRightText }) => {
                 </Link>
               ))}
 
-              <button id="ot-sdk-btn" className="ot-sdk-show-settings">Manage Cookie Settings</button>
+              <button id="ot-sdk-btn" className="ot-sdk-show-settings" onClick={handleCookieSettingsClick}>Manage Cookie Settings</button>
             </div>
 
             <div className='footer-right-section'>

@@ -29,7 +29,7 @@ const Player = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
     <>
       <div className="video-container" id="video-container">
         {!normalAdCompleted ? (
-          <AdComponent onNormalAdCompleted={() => setNormalAdCompleted(true)} />
+          <AdComponent videoData={videoData} onNormalAdCompleted={() => setNormalAdCompleted(true)} />
         ) : (
           <VideoJSPlayer videoData={videoData} resumeFrom={resumeFrom} handlePlayerClose={handlePlayerClose} />
         )}

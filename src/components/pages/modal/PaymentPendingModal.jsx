@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import '../../../assets/styles/LoginPage.css';
 import { QRCodeSVG } from 'qrcode.react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const PaymentPendingModal = ({price, video_id, valid_date, video_name, video_access_start_time, video_access_end_time}) => {
     const [jwtToken, setJwtToken] = useState(null);
@@ -51,11 +51,11 @@ const PaymentPendingModal = ({price, video_id, valid_date, video_name, video_acc
         // Open Stripe payment in new window
     const handlePaymentClick = () => {
         if (!jwtToken) return;
-        const qrCodeUrl = `${process.env.REACT_APP_RAYD8_CONNECT}/rent-video?q=${jwtToken}&user_id=${user_id}`;
+        const qrCodeUrl = `${process.env.REACT_APP_DISABILITY_OWNED}/rent-video?q=${jwtToken}&user_id=${user_id}`;
         window.open(qrCodeUrl, '_blank', 'width=600,height=800');
     };
         
-    const qrCodeUrl = `${process.env.REACT_APP_RAYD8_CONNECT}/rent-video?q=${jwtToken}&user_id=${user_id}`;
+    const qrCodeUrl = `${process.env.REACT_APP_DISABILITY_OWNED}/rent-video?q=${jwtToken}&user_id=${user_id}`;
     return (
         <div className="login-modal-inner">
             <h1 className='payment_pending_modal_heading'>Payment Pending</h1>
@@ -64,11 +64,11 @@ const PaymentPendingModal = ({price, video_id, valid_date, video_name, video_acc
 
             <div className='payment_pending_modal_qr_div col-md-12'>
                 {/* <div className='col-md-6 payment_pending_modal_a_div'>
-                    <a href={qrCodeUrl} className='payment_pending_modal_a_tag' target="_blank" rel="noopener noreferrer">Rayd8 Webtv Connect</a>
+                    <a href={qrCodeUrl} className='payment_pending_modal_a_tag' target="_blank" rel="noopener noreferrer">Disability Owned</a>
                 </div> */}
                 <div className='col-md-6 payment_pending_modal_a_div'>
                     <button onClick={handlePaymentClick} className='payment_pending_modal_a_tag'>
-                        Rayd8 Webtv Connect
+                        Disability Owned
                     </button>
                 </div>
                 <div className='col-md-6'>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMenuDetails, getMenuVideoDetails, seriesPaginationData } from "../../services/channelData.service";
@@ -13,7 +14,6 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
     const loaderRef = useRef(null);
     const { seeMoreTitle } = useParams();
     const [detailData, setDetailData] = useState([]);
-    const [videoProgress, setVideoProgress] = useState({});
     const [type, setType] = useState('');
     const [activeSubPage, setActiveSubPage] = useState(null);
     const [page, setPage] = useState(1);
@@ -24,7 +24,7 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
     const [playlistId, setPlaylistId] = useState(null);
 
     const location = useLocation();
-    const activeSubPageParentId = location.state?.activeSubPageParent;
+    // const activeSubPageParentId = location.state?.activeSubPageParent;
   
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -33,12 +33,12 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
                 const storedPlaylistId = getLocalStorageData('pageClick');
                 setPlaylistId(storedPlaylistId);
 
-                let menuData;
-                if (activeSubPageParentId != null) {
-                menuData = await getMenuDetails(activeSubPageParentId);
-                } else {
+                // let menuData;
+                // if (activeSubPageParentId != null) {
+                // menuData = await getMenuDetails(activeSubPageParentId);
+                // } else {
                 menuData = await getMenuDetails(storedPlaylistId);
-                }
+                // }
                
                 const playlists = menuData?.content?.playlists || [];
                 const matchingPlaylist = playlists.find( 
@@ -48,7 +48,7 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
                 if (!matchingPlaylist) return;
 
                 const categoryId = matchingPlaylist._id;
-                setType(matchingPlaylist?.program_type ?? 'videos');
+                setType(matchingPlaylist?.program_type ?? 'video');
                 setActiveSubPage(categoryId);
 
                 setDetailData([]);
@@ -145,6 +145,8 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
                 activePageLayout={activePageLayout}
             />
             <div className="see-more-details-page">
+            
+            <div className={`page-container main-no-video-show ${location.pathname.startsWith("/channels/details") ? "see-more-inner-page" : "" }`} >
             <div className="back-to-page prj-element" id="back-to-page" onClick={() => {sessionStorage.removeItem('initialUrl'); clickOnBackButton()}}>
                 <ArrowLeftIcon className="" />
                 <div className="grid-title">
@@ -154,8 +156,6 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
                 </div>
                
             </div>
-            
-            <div className="page-container main-no-video-show">
                 <div className="page-content" id="page-content">
                     <div className="horizontal-list">
                         {detailData.length > 0 && (
@@ -177,7 +177,7 @@ const SeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChange, me
                                                 startTime={v.startTime}
                                                 endTime={v.endTime}
                                                 duration={v.duration}
-                                                progress={Number(videoProgress[v.id] || 0)}
+                                                progress={0}
                                                 genres={v.genres}
                                                 category={v.category}
                                                 channelId={v.channelId}

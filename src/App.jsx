@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, Suspense } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { APP_PAGES, PAGE_LAYOUT, PLATFORMS } from './config/const.config';
 import SplashScreenPage from './views/SplashScreen';
 import SearchPage from './views/Search';
@@ -23,6 +23,7 @@ import DynamicPage from './views/DynamicPage';
 import AboutUs from './components/pages/AboutUs';
 
 const App = () => {
+  const location = useLocation();
   const [appLoaded, setAppLoaded] = useState(false);
   const [menuData, setMenuData] = useState([]);
   const [pageLayouts, setPageLayouts] = useState({
@@ -82,7 +83,6 @@ const App = () => {
           const matchedMenu = menu.find(item => item.title === decodeURIComponent(currentMenuName));
           if (matchedMenu) {
             setActivePage(matchedMenu.id);
-            // setActivePageLayout(layouts[matchedMenu.id]);
             setActivePageLayout(layouts[matchedMenu.id] || { layout: PAGE_LAYOUT.RAIL, bgVideo: '' });
           } else if (getLocalData) {
             setActivePage(menu[0].id.toString());
@@ -97,11 +97,17 @@ const App = () => {
           setAppLoaded(true);
         }, 1000);
       } catch (error) {
-        console.error('Failed to load menu data', error);
+        // console.error('Failed to load menu data', error);
       }
     };
     fetchMenuData();
   }, []);  
+
+  useEffect(() => {
+    const bodyEl = document.body;
+    bodyEl.classList.remove("menu-open");
+    sessionStorage.removeItem('user_interacted');
+  }, [activePage])
 
   const handlePageChange = (page) => {
     addLocalStorageData('pageClick', page);
@@ -115,23 +121,59 @@ const App = () => {
     setActivePage(page.toString());
   };
 
+    useEffect(() => {
+    if (!menuData.length) return;
+
+    const currentMenuName = location.pathname.split('/')[1];
+    const matchedMenu = menuData.find(
+      (item) => item.title === decodeURIComponent(currentMenuName)
+    );
+
+    if (matchedMenu) {
+      setActivePage(matchedMenu.id.toString());
+      setActivePageLayout(
+        pageLayouts[matchedMenu.id] || { layout: PAGE_LAYOUT.RAIL, bgVideo: '' }
+      );
+    } else {
+      setActivePageLayout(
+        { layout: PAGE_LAYOUT.RAIL, bgVideo: '' }
+      )
+    }
+  }, [location, menuData, pageLayouts]);
+
   if (!appLoaded) {
     return <SplashScreenPage />;
   }
 
   return (
-    <Router>
+    <>
+      <Suspense fallback={<SplashScreenPage />}>
       <Routes>
-        <Route path="/" element={<Navigate to={`/${encodeURIComponent(menuData[0].title)}`} />} />
+        <Route 
+          path="/" 
+          element={
+            <Suspense fallback={<SplashScreenPage />}>
+            <DynamicPage
+              key={activePage}
+              menuData={menuData}
+              activePage={activePage}
+              activePageLayout={activePageLayout}
+              handlePageChange={handlePageChange}
+            />
+            </Suspense>
+          }
+        />
         <Route 
           path="/search"
           element={
+            <Suspense fallback={<SplashScreenPage />}>
             <SearchPage
               menuData={menuData}
               activePage={activePage}
               activeSubPage={null}
               handlePageChange={handlePageChange}
             />
+            </Suspense>
           }
         />
         <Route 
@@ -211,7 +253,7 @@ const App = () => {
           }
         />
         <Route 
-          path="/About Us"
+          path="/about-us"
           element={
             <AboutUs 
               activePage={activePage}
@@ -224,7 +266,8 @@ const App = () => {
         <Route path="*" element={<Navigate to={`/${encodeURIComponent(menuData[0].title)}`} />} />
       </Routes>
       <LogoutButton />
-    </Router>
+      </Suspense>
+    </>
   );
 };
 

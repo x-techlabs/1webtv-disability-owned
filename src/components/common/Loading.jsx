@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const Loading = ({ showVideo }) => {
+  const location = window.location.pathname;
+  const internalPage = location.split('/').length > 2;
+
   const [dots, setDots] = useState(['dot1']);
   const animateLoader = () => {
     if (dots.length === 3) {
@@ -16,7 +20,7 @@ const Loading = ({ showVideo }) => {
   }, [dots]);
 
   return (
-    <div className={showVideo ? 'loader loader-fix-pos' : 'loader'}>
+    <div className={showVideo ? 'loader loader-fix-pos' : `loader ${internalPage ? 'internal-page-loader' : ''}`}>
       <div className="loader-text">
         <span className="loading-name">Loading</span>
         {dots.map((d) => (

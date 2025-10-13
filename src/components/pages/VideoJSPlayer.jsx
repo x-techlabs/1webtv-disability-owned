@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -14,11 +15,15 @@ import fastforward from "../../assets/images/icons/fast-forward.png";
 import rewind from "../../assets/images/icons/rewind.png";
 import { setUserVideoProgress } from "../../utils/localCache.util";
 import { getAllDeviceInfo } from "../../utils/deviceInfo.util";
+import { buildLiveVastUrl } from "../../utils/liveVastUrl";
 // import { getVastUrl } from "../../services/channelData.service";
 // import closeIcon from "../../assets/images/icons/close.png";
 import "video.js/dist/video-js.css";
 // import { PLATFORMS } from "../../config/const.config";
 import { ArrowLeftIcon, ListBulletIcon } from "@heroicons/react/16/solid";
+
+import "videojs-contrib-quality-levels";
+import "videojs-hls-quality-selector";
 
 const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
     const videoPlayerContainer = useRef();
@@ -30,21 +35,13 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
         vastUrl: "",
     };
 
-    const isLive = false;
-    const appstoreUrl = process.env.REACT_APP_FIRETV_APPSTORE_URL;
     const appName = process.env.REACT_APP_FIRETV_APP_NAME;
-    const appBundleId = process.env.REACT_APP_FIRETV_APP_BUNDLE;
-    const appChannelName = process.env.REACT_APP_FIRETV_CHANNEL_NAME;
-    const contentSeries = "";
-    const deviceInfo = getAllDeviceInfo();
     const videoId = videoData.id;
     const { title, season, episode, rating, channelId, duration } = videoData;
-    const genres = videoData.genres || "tvmovies";
-    const liveStream = "";
-    const producerName = "";
-    const randomCB = Math.floor(Math.random() * 90000) + 10000;
+    const genres = videoData.content_type ? videoData.content_type : videoData.type === "event" ? "LIVE" : "VOD";
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth >= 426);
+    const [deviceInfo, setDeviceInfo] = useState(null);
+    const randomCB = Math.floor(Math.random() * 100000);
 
     const timeFormat = (seconds) => {
         let secs = seconds;
@@ -69,13 +66,13 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
             if (window.VideoJSMMSSIntgr) {
                 mmvjsPlugin = new window.VideoJSMMSSIntgr();
             } else {
-                console.warn("MediaMelon plugin not found on window");
+                // console.warn("MediaMelon plugin not found on window");
                 return;
             }
+            if (!mmvjsPlugin || mmvjsPlugin.getRegistrationStatus()) return;
 
-            if (mmvjsPlugin && !mmvjsPlugin.getRegistrationStatus()) {
                 mmvjsPlugin.registerMMSmartStreaming(
-                    "DisabilityOwnedPlayer",
+                    "HBCUGOPlayer",
                     process.env.REACT_APP_MEDIAMELON_CUSTOMER_ID,
                     null,
                     window.location.hostname,
@@ -83,16 +80,17 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     null
                 );
 
-                mmvjsPlugin.reportPlayerInfo("Disability Owned", "ReactPlayer", "1.0.0");
-                mmvjsPlugin.reportAppInfo(appName || "Disability Owned", "1.0.0");
+                mmvjsPlugin.reportPlayerInfo("HBCU GO", "ReactPlayer", "1.0.0");
+                mmvjsPlugin.reportAppInfo(appName || "HBCU GO", "1.0.0");
                 mmvjsPlugin.setDeviceInfo(navigator.userAgent);
                 mmvjsPlugin.reportVideoQuality("HD");
 
+                const isLive = videoData.type === "event" ? true : false; 
                 const mmVideoAssetInfo = {
                     assetName: title,
                     assetId: videoId.toString(),
                     videoId: videoId.toString(),
-                    contentType: "VOD",
+                    contentType: genres ? genres : "LIVE",
                     genre: genres,
                     drmProtection: "Unknown",
                     episodeNumber: episode?.toString(),
@@ -110,10 +108,9 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     mmVideoAssetInfo,
                     isLive
                 );
-                console.log("MediaMelon initialized successfully");
-            }
+                // console.log("MediaMelon initialized successfully");
         } catch (error) {
-            console.error("MediaMelon SmartSight initialization failed", error);
+            // console.error("MediaMelon SmartSight initialization failed", error);
         }
     };
 
@@ -126,13 +123,41 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                 retries++;
                 setTimeout(checkPlugin, interval);
             } else {
-                console.error("MediaMelon plugin failed to load after retries");
+                // console.error("MediaMelon plugin failed to load after retries");
             }
         };
         checkPlugin();
     };
 
+    useEffect(() => {
+        // fetch device info first
+        const loadDeviceInfo = async () => {
+          const info = await getAllDeviceInfo();
+          setDeviceInfo(info);
+        };
+        loadDeviceInfo();
+    }, []);
+
     const setupPlayer = () => {
+        if (!deviceInfo) return;
+
+        let videoHLSUrl;
+        if (videoData.type === "event" && videoData.hlsUrl) {
+            try {
+                const live_event_url = buildLiveVastUrl({
+                    hlsVideo: videoData.hlsUrl,
+                    videoData,
+                    deviceInfo,
+                    randomCB,
+                });
+                videoHLSUrl = live_event_url;
+            } catch (err) {
+                videoHLSUrl = playerObj.videoUrl; // fallback
+            }
+        } else {
+            videoHLSUrl = playerObj.videoUrl;
+        }
+        
         try {
             playerIns.current = videojs(videoPlayerContainer.current, {
                 controls: true,
@@ -144,21 +169,25 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                 html5: {
                     vhs: {
                         experimentalBufferBasedABR: true,
+                        overrideNative: true, // needed for captions control
                     },
+                    nativeTextTracks: false
                 },
                 poster: videoData.poster,
                 sources: [
                     {
                         type: "application/x-mpegurl",
-                        src: playerObj.videoUrl,
+                        src: videoHLSUrl,
                     },
                 ],
                 tracks: [
                     {
                         src: videoData.vttUrl,
-                        kind: "subtitles",
+                        kind: "captions",
                         srclang: "en",
                         label: "English",
+                        default: true,
+                        mode: "showing",
                     },
                 ],
             });
@@ -185,12 +214,13 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     );
                     currentTimeDuration.innerText = currentDuration;
 
-                    const playerProgressBarWidth =
-                        window.document.getElementById("player-progress");
-                    playerProgressBarWidth.style.width = `${updateProgressBar(
-                        playerIns.current.currentTime(),
-                        playerIns.current.duration()
-                    )}%`;
+                    const playerProgressBarWidth = window.document.getElementById("player-progress");
+                    if (playerProgressBarWidth) {
+                        playerProgressBarWidth.style.width = `${updateProgressBar(
+                            playerIns.current.currentTime(),
+                            playerIns.current.duration()
+                        )}%`;
+                    }
                     const watchTime = Math.floor(playerIns.current.currentTime());
                     if (watchTime === 0) return;
 
@@ -207,6 +237,30 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     setIsPlaying(true);
                 });
 
+                // Enable quality selector
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (!isIOS) {
+                    if (playerIns.current.hlsQualitySelector) {
+                       playerIns.current.hlsQualitySelector({ displayCurrentQuality: true });
+                    }
+                }
+
+                // 👇 Force quality switching when user selects
+                const qualityLevels = playerIns.current.qualityLevels();
+                qualityLevels.on('addqualitylevel', (event) => {
+                    const level = event.qualityLevel;
+                    level.enabled = true; // enable ABR by default
+                });
+
+                playerIns.current.on('qualitySelected', (event, data) => {
+                    const quality = data.newQuality; // e.g., "720p"
+                    const levels = playerIns.current.qualityLevels();
+
+                    for (let i = 0; i < levels.length; i++) {
+                        levels[i].enabled = levels[i].height === parseInt(quality, 10);
+                    }
+                });
+
                 playerIns.current.on("pause", () => {
                     const watchTime = Math.floor(playerIns.current.currentTime());
                     if (watchTime === 0) return;
@@ -215,7 +269,6 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                 });
                 playerIns.current.on("ended", () => {
                     setIsPlaying(false);
-                    clickOnBackButton();
                 });
                 playerIns.current.on("adstart", () => {
                     window.document.getElementById("player-bottom-bar").style.display =
@@ -243,7 +296,7 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                 });
             });
         } catch (e) {
-            console.error("Player setup failed", e);
+            // console.error("Player setup failed", e);
         }
     };
 
@@ -269,41 +322,7 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
     };
 
     useEffect(() => {
-        let vastParams = process.env.REACT_APP_VAST_PARAMS;
-        if (vastParams && vastParams.length) {
-            vastParams = vastParams
-                .replace("{content_type}", "")
-                .replace("{slot_type}", "")
-                .replace("{device_ifa}", encodeURIComponent(deviceInfo.uid))
-                .replace("{ua}", encodeURIComponent(deviceInfo.ua))
-                .replace("{os}", encodeURIComponent(deviceInfo.os))
-                .replace("{osv}", encodeURIComponent(deviceInfo.osv))
-                .replace("{model}", encodeURIComponent(deviceInfo.model))
-                .replace("{video_id}", videoId)
-                .replace("{content_genre}", encodeURIComponent(genres))
-                .replace("{video_rating}", encodeURIComponent(rating))
-                .replace("{content_duration}", duration)
-                .replace("{us_privacy}", "")
-                .replace("{device_height}", deviceInfo.dimensions.height)
-                .replace("{device_width}", deviceInfo.dimensions.width)
-                .replace("{player_height}", deviceInfo.dimensions.height)
-                .replace("{player_width}", deviceInfo.dimensions.width)
-                .replace("{dnt}", "")
-                .replace("{language}", "en")
-                .replace("{connection_type}", "")
-                .replace("{category}", "")
-                .replace("{cb}", randomCB)
-                .replace("{content_episode}", episode)
-                .replace("{media_title}", encodeURIComponent(title))
-                .replace("{series_title}", encodeURIComponent(contentSeries))
-                .replace("{content_season}", season);
-            vastParams += "&app_bundle=B08JPDLL1Z";
-            vastParams += `&app_name=${encodeURIComponent(appChannelName)}`;
-            vastParams += `&app_store_url=${encodeURIComponent(appstoreUrl)}`;
-        }
-
         playerObj.videoUrl = videoData.hlsUrl;
-        playerObj.vastUrl = `${process.env.REACT_APP_VAST_BASE_URL}?${vastParams}`;
         setupPlayer();
 
         setTimeout(() => {
@@ -315,20 +334,11 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
 
         return () => {
             if (playerIns.current) {
-                setTimeout(() => {
-                    playerIns.current.dispose();
-                }, 2000);
+                playerIns.current.dispose();
+                playerIns.current = null;
             }
         };
-    }, []);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobileView(window.innerWidth >= 426);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [deviceInfo]);
 
     const formattedDate = videoData.releaseDate ? timeAgo(videoData.releaseDate) : "N/A";
     function timeAgo(dateString) {
@@ -357,14 +367,15 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
     }
 
     return (
+        <>
+        <div
+            className="close-video-container prj-element"
+            id="back-to-page-video" onClick={() => clickOnBackButton()}
+        >
+            <ArrowLeftIcon className="size-2" />
+            <span>{videoData.title}</span>
+        </div>
         <div className="videojs-player-container video-flex-box">
-            <div
-                className="close-video-container prj-element"
-                id="back-to-page-video" onClick={() => clickOnBackButton()}
-            >
-                <ArrowLeftIcon className="size-2" />
-                {isMobileView ? videoData.title : (videoData.title.length > 20 ? `${videoData.title.slice(0, 20)}...` : videoData.title)}
-            </div>
             <div id="video-player">
                 <video
                     id={id}
@@ -373,6 +384,8 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     height="auto"
                     controls={true}
                     ref={videoPlayerContainer}
+                    crossOrigin="anonymous"
+                    playsInline
                 />
             </div>
             <div className="player-overlay">
@@ -405,7 +418,6 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                                         videojs(`player`).currentTime() - 10
                                     );
                                 }}
-                                role="none"
                             >
                                 <img src={rewind} alt="" className="media-btn-img" />
                             </div>
@@ -416,7 +428,6 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                                 data-focus-right="#fast-forward"
                                 data-focus-up="#play-pause"
                                 data-focus-down="#play-pause"
-                                role="none"
                             >
                                 <img
                                     src={isPlaying ? pause : play}
@@ -445,7 +456,6 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                                         videojs(`player`).currentTime() + 10
                                     );
                                 }}
-                                role="none"
                             >
                                 <img src={fastforward} alt="" className="media-btn-img" />
                             </div>
@@ -466,6 +476,7 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                 <p>{videoData.description}</p>
             </div>
         </div>
+        </>
     );
 };
 

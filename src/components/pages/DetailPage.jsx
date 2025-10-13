@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable consistent-return */
 /* eslint-disable react/no-unknown-property */
@@ -25,8 +26,8 @@ import PaymentPendingModal from './modal/PaymentPendingModal';
 import axios from 'axios';
 import TopMenu from '../common/TopMenu';
 import { ArrowLeftIcon, PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
-import landscape_dummy_poster from "../../assets/images/landscape_dummy_poster.png";
-import portrait_dummy_poster from "../../assets/images/portrait_dummy_poster.png";
+import landscape_dummy_poster from "../../assets/images/landscape_dummy_poster.webp";
+import portrait_dummy_poster from "../../assets/images/portrait_dummy_poster.webp";
 
 const DetailPage = ({
   detailPageData: initialDetailPageData,
@@ -332,6 +333,7 @@ const DetailPage = ({
                 }`}
               >
                 <img
+                  id={`target-image-h-v-${detailPageData.id}`}
                   src={
                     detailPageData.isPortrait
                       ? detailPageData.posterV
@@ -420,16 +422,18 @@ const DetailPage = ({
                           data-focus-right="#play-btn"
                           data-focus-up={false}
                           data-focus-down=".video.prj-element"
+                          alt={detailPageData.title}
+                          aria-label={'Resume video'}
                           data-on-self-focus="#video-detail-focus"
+                          onClick={sessionStorage.setItem("user_interacted", true)}
                           >
                           <img src={resumeIcon} alt="resume" />
                           Resume from {toHoursAndMinutes(currentProgress)}
                         </Link>
                       )}
                       <Link
-                        to={`/watch/featured/${detailPageData.title}`}
+                        to={`/watch/featured/${encodeURIComponent(detailPageData.title)}`}
                         id="play-btn"
-                        type="button"
                         className={
                           currentProgress === 0
                             ? 'play-btn small prj-element '
@@ -440,7 +444,9 @@ const DetailPage = ({
                         data-focus-up={false}
                         data-focus-down=".video.prj-element"
                         data-on-self-focus="#video-detail-focus"
+                        aria-label={currentProgress === 0 ? 'Play' : 'Play from beginning'}
                         state={{ play_from_beginning: true }}
+                        onClick={sessionStorage.setItem("user_interacted", true)}
                       >
                         <img src={playIcon} alt="play" />
                         {Number(currentProgress) > 0 && Number(detailPageData.duration) - Number(currentProgress) > 2  ? 'Play from beginning' : 'Play'}

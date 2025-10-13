@@ -1,5 +1,5 @@
 {
-  "name": "hbcu-samsung",
+  "name": "disability-owned",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,12 +17,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.5.0",
     "react-scripts": "5.0.1",
     "swiper": "^10.2.0",
     "uuid": "^9.0.0",
     "video.js": "^7.21.2",
     "videojs-contrib-ads": "^6.9.0",
+    "videojs-contrib-quality-levels": "^2.0.9",
+    "videojs-hls-quality-selector": "^1.1.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

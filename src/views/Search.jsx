@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { VIDEO_TYPES } from '../config/const.config';
@@ -60,7 +61,7 @@ const Search = ({ menuData, activePage, handlePageChange }) => {
 
         (content.videos || []).forEach((v) => {
           const matchedPlaylist = playlists.find(p => p._id === v.playlist_id);
-          const fallbackTitle = playlists?.[0]?.title;
+          // const fallbackTitle = playlists?.[0]?.title;
           //const title = matchedPlaylist?.title || fallbackTitle;
           const title = v?.title || matchedPlaylist?.title;
           setSubMenuData(encodeURIComponent(title));

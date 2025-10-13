@@ -30,7 +30,7 @@ const BgPlayer = ({ id, source }) => {
     return () => {
       playerIns.current.dispose();
     };
-  }, []);
+  }, [id, source]);
 
   return (
     <div className="video-container" id="video-container">

@@ -15,7 +15,6 @@ import { ArrowLeftIcon, PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
 import scrollAppView from '../../utils/viewScroll.util';
 import TopMenu from '../common/TopMenu';
 import EpisodesTabs from './EpisodesTabs';
-import { Link } from 'react-router-dom';
 import landscape_dummy_poster from "../../assets/images/landscape_dummy_poster.png";
 import portrait_dummy_poster from "../../assets/images/portrait_dummy_poster.png";
 
@@ -109,14 +108,14 @@ const SeriesDetailPage = ({
                 </button>
                 <div className="bg-poster-layer" />
 
-                <Link className="back-to-page prj-element" id="back-to-page" onClick={() => {sessionStorage.removeItem('initialUrl'); clickOnBackButton()}}>
+                <div className="back-to-page prj-element" id="back-to-page" onClick={() => {sessionStorage.removeItem('initialUrl'); clickOnBackButton()}}>
                     <ArrowLeftIcon className="" />
-                </Link>
+                </div>
                 <div className={detailPageData.isPortrait ? 'video-details-main-div movies' : 'video-details-main-div videos'} id="video-detail-focus" >
                     <div className='video-details'>
                         <div className="image">
                             <div className={`image-wrap portrait`}>
-                                <img src={detailPageData.posterV} alt={detailPageData.title} onError={(error) => fallbackImage(error, detailPageData.title, detailPageData.isPortrait)}/>
+                                <img src={detailPageData.isPortrait ? detailPageData.posterV : detailPageData.posterH} alt={detailPageData.title} onError={(error) => fallbackImage(error, detailPageData.title, detailPageData.isPortrait)}/>
                             </div>
                         </div>
                         <div className="details">

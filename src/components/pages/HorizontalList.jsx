@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-param-reassign */
@@ -10,7 +11,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 import 'swiper/css/pagination';
 import Item from './Item';
-import DetailPage from './DetailPage';
 import { getMenuVideoDetails, seriesPaginationData } from '../../services/channelData.service';
 import { addLocalStorageData, getAllVideoProgress } from '../../utils/localCache.util';
 import scrollAppView from '../../utils/viewScroll.util';
@@ -26,7 +26,7 @@ const HorizontalList = ({
   activePage,
   activeSubPageParent,
   activeSubPage,
-  videosList,
+  videosList = [],
   keyUpElement,
   keyDownElement,
   seriesCount,
@@ -34,20 +34,16 @@ const HorizontalList = ({
   subMenuData,
 }) => {
   const location = useLocation();
-  // const videosLength = activePage === '' ? videosList.length : videosCount;
   const videoProgress = getAllVideoProgress();
   const scrollHandleButtonId = `scroll-${containerId}`;
   
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [videos, setVideos] = useState(videosList);
+  const videos = videosList;
   const [mediaItems, setMediaItems] = useState(videosList);
   const [currentUrl, setCurrentUrl] = useState({});
-  const [showDetailPage, setShowDetailPage] = useState(false);
-  const [detailPageData, setDetailPageData] = useState({});
   const [page, setPage] = useState(1);
   const perPage = 20;
   const hasSaved = useRef(false);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 425);
 
   useEffect(() => {
     const currentUrl = location.pathname;
@@ -142,27 +138,12 @@ const HorizontalList = ({
     }
   }, [activePage, activeSubPage, seriesCount, type, videosCount]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 425);
-    };
-  
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const handleShowDetailPage = (data) => {
-    setShowDetailPage(false);
-    setDetailPageData(data);
-    setShowDetailPage(true);
     if (window.document.getElementById('resume-btn')) {
       window.document.getElementById('resume-btn').classList.add('focused');
     } else if (window.document.getElementById('play-btn')) {
       window.document.getElementById('play-btn').classList.add('focused');
     }
-  };
-  const handleHideDetailPage = () => {
-    setShowDetailPage(false);
   };
 
   const handleScroll = () => {
@@ -204,9 +185,9 @@ const HorizontalList = ({
             <div className="grid-title" id={type}>
               {title}
             </div>
-            {currentUrl !== "/search" && (
+            {currentUrl !== "/search" && (videosCount > perPage || seriesCount > perPage) && (
               <Link to={`/channels/details/${encodeURIComponent(title)}`} className='see_more_options' id={type}  state={{ activeSubPageParent }}>
-                See More {isMobileView ? '' : title}
+                See More
               </Link>
             )}
           </div>
@@ -335,8 +316,4 @@ HorizontalList.propTypes = {
   keyUpElement: PropTypes.string.isRequired,
   keyDownElement: PropTypes.string.isRequired,
 };
-HorizontalList.defaultProps = {
-  videosList: [],
-};
-
 export default HorizontalList;

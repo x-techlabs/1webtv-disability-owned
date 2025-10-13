@@ -72,8 +72,8 @@ export const getAdditionalTopMenuDetails = async (id) => {
 }
 
 // Getting the ads from the api vastcsai_webtv_v2_json
-export const getVastAd = async () => {
-  const url = `${process.env.REACT_APP_CHANNEL_BASE_URL}/vastcsai_webtv_v2_json`;
+export const getVastAd = async (vastUrls) => {
+  const url = `${process.env.REACT_APP_CHANNEL_BASE_URL}/vastcsai_webtv_v2_json?${vastUrls}`;
   const jsonCall = await fetch(`${url}`);
   const response = await jsonCall.json();
   return response;

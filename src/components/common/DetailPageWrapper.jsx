@@ -71,6 +71,7 @@ const DetailPageWrapper = ({ activePage, menuData, activePageLayout, handlePageC
               monetization_custom_duration:v.monetizationDetails?.custom_duration || '',
               monetization_start_time:v.monetizationDetails?.start_time || '',
               monetization_end_time:v.monetizationDetails?.end_time || '',
+              isPortrait: program_type === 'movies' ? true : false,
             }));
             if (formattedVideos.length === 0) {
               navigate(`/`, { replace: true });
@@ -80,12 +81,12 @@ const DetailPageWrapper = ({ activePage, menuData, activePageLayout, handlePageC
             setVideos(formattedVideos);
           } catch (error) {
             navigate(`/`, { replace: true });
-            console.error('Error fetching detail data:', error);
+            // console.error('Error fetching detail data:', error);
           }
       };
   
       fetchData();
-    }, []);
+    }, [activePage, menuData, navigate]);
     
     if (!detailData) {
       return <Loading showVideo={false} />;

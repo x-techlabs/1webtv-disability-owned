@@ -105,9 +105,17 @@ const TopMenu = ({
 
   const mobMenu = () => {
     setshowSideMenu(true);
+    const bodyEl = document.body;
+    if (bodyEl) {
+      bodyEl.classList.add("menu-open");
+    }
   };
   const closeNavBar = () => {
     setshowSideMenu(false);
+    const bodyEl = document.body;
+    if (bodyEl) {
+      bodyEl.classList.remove("menu-open");
+    }
   };
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -165,8 +173,10 @@ const TopMenu = ({
                   onClick={mobMenu}
                   className="my-button"
                   id="my-button"
+                  name="my-button"
+                  aria-label="Open menu"
                 >
-                  <svg viewBox="0 0 100 80" width="30" height="30" style={{ fill: 'white' }}>
+                  <svg viewBox="0 0 100 80" width="30" style={{ fill: 'white', position: 'relative', top: '2px' }}>
                     <rect width="80" height="8" />
                     <rect y="30" width="40" height="8" />
                     <rect y="60" width="80" height="8" />
@@ -174,12 +184,13 @@ const TopMenu = ({
                 </button>
               </div>
               <div onClick={() => openScreen()}>
-                <Link to='/' className="link brand-logo" onClick={() => handlePageChange(menuData[0].id)}>
+                <Link to='/' className="link brand-logo" onClick={() => handlePageChange(menuData[0].id)} alt={appName || "Disability Owned"}>
                 <img
                   className={`${colorChange ? 'brand-logo-scroll' : ''} ${activePage !== APP_PAGES.LANDINGPAGE ? 'brand-logo-home' : ''
                     }`}
                   src={logoImg}
-                  alt={appName}
+                  alt={appName || "Disability Owned"}
+                  name={appName}
                 />
               </Link>
               </div>
@@ -187,7 +198,7 @@ const TopMenu = ({
 
           <div className="tabs-desktop col-12 col-md-auto">
             <div className={`menu-items ${!isMobileView && (videoTitle || seriesId) ? "menu-items-hidden-lg-screen" : ""}`}>
-              {menuData.map((item, idx) => (
+              {menuData.slice(0, 5).map((item, idx) => (
                 <Link
                   to={`/${encodeURIComponent(item.title)}`}
                   id={`top-menu-${idx}`}
@@ -196,7 +207,6 @@ const TopMenu = ({
                     ${colorChange || Number(activePage) !== Number(APP_PAGES.LANDINGPAGE) ? " scroll-top-menu" : ""}
                   `}
                   key={`menu-${item.id}`}
-                  aria-hidden
                   onClick={() => handlePageChange(item.id)}
                   data-focus-left={idx === 0 ? false : `#top-menu-${idx - 1}`}
                   data-focus-right={
@@ -211,9 +221,9 @@ const TopMenu = ({
                 </Link>
               ))}
               <Link
-                to={`/About Us`}
+                to={`/about-us`}
                 id={`top-menu-support`}
-                className={`link menu-item prj-element scroll-top-menu ${decodeURIComponent(window.location.pathname) === '/About Us' ? 'active focused' : ''}`}
+                className={`link menu-item prj-element scroll-top-menu ${decodeURIComponent(window.location.pathname) === '/about-us' ? 'active focused' : ''}`}
                 aria-hidden
                 data-focus-up={false}
                 data-focus-down=".page-container .prj-element"
@@ -259,11 +269,10 @@ const TopMenu = ({
                   to={`/${encodeURIComponent(item.title)}`}
                   id={`top-menu-${idx}`}
                   className={`link menu-item prj-element
-                    ${currentPath === item.title || Number(activePage) === Number(item.id) ? " active focused" : ""}
+                    ${currentPath === item.title ? " active focused" : ""}
                     ${colorChange || Number(activePage) !== Number(APP_PAGES.LANDINGPAGE) ? " scroll-top-menu" : ""}
                   `}
                   key={`menu-${item.id}`}
-                  aria-hidden
                   onClick={() => handlePageChange(item.id)}
                   data-focus-left={idx === 0 ? false : `#top-menu-${idx - 1}`}
                   data-focus-right={
@@ -278,9 +287,9 @@ const TopMenu = ({
                 </Link>
               ))}
               <Link
-                to={`/About US`}
+                to={`/about-us`}
                 id={`top-menu-support`}
-                className={`link menu-item prj-element scroll-top-menu ${decodeURIComponent(window.location.pathname) === '/About US' ? 'active focused' : ''}`}
+                className={`link menu-item prj-element scroll-top-menu ${decodeURIComponent(window.location.pathname) === '/about-us' ? 'active focused' : ''}`}
                 aria-hidden
                 data-focus-up={false}
                 data-focus-down=".page-container .prj-element"

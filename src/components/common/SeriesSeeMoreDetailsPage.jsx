@@ -51,7 +51,7 @@ const SeriesSeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChan
 
                 await seriesData(storedPlaylistId, categoryId);
             } catch (error) {
-                console.error("Error initializing video data:", error);
+                // console.error("Error initializing video data:", error);
             } finally {
                 setIsFirstLoad(false);
             }
@@ -92,7 +92,7 @@ const SeriesSeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChan
                 setHasMore(false);
             }
         } catch (error) {
-            console.error("Error fetching videos:", error);
+            // console.error("Error fetching videos:", error);
         } finally {
             setLoading(false);
         }
@@ -164,7 +164,6 @@ const SeriesSeeMoreDetailsPage = ({ activePage, activePageLayout, handlePageChan
                                     src={loadingImg}
                                     className="web-loader-load-more-spinner"
                                     alt="web-loader"
-                                    loading="lazy"
                                 />
                             </div>
                         )}

@@ -15,7 +15,9 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
   const randomCB = Math.floor(Math.random() * 100000);
   const appstoreUrl = process.env.REACT_APP_FIRETV_APPSTORE_URL;
   const appChannelName = process.env.REACT_APP_FIRETV_CHANNEL_NAME;
-  const userInteracted = sessionStorage.getItem('user_interacted');
+  const [userInteracted, setUserInteracted] = useState(() => {
+    return sessionStorage.getItem('user_interacted') === 'true';
+  });
 
   useEffect(() => {
     // Fetch device info first
@@ -128,7 +130,7 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
               playerRef.current.muted(false);
               playerRef.current.volume(1.0);
               await playerRef.current.play();
-              sessionStorage.setItem('user_interacted', 'true');
+              setUserInteracted(true);
             }
           };
 
@@ -170,13 +172,19 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
           player.on('error', onError);
 
           if (!userInteracted) {
-            window.addEventListener('click', unmuteOnGesture);
+            const handleClick = async () => {
+              await unmuteOnGesture();
+              window.removeEventListener('click', handleClick);
+            };
+            window.addEventListener('click', handleClick);
+            return () => {
+              window.removeEventListener('click', handleClick);
+            };
           } else {
             try {
-              playerRef.current.muted(false);
+              playerRef.current.muted(true);
               playerRef.current.volume(1.0);
               await playerRef.current.play(); // works because user has interacted previously
-              safeDispose();
             } catch (err) {
               safeDispose();
               console.warn('Autoplay with sound blocked', err);
@@ -213,8 +221,10 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
     if (playerRef.current && !isDisposed.current) {
       playerRef.current.muted(false);
       playerRef.current.volume(1.0);
-      playerRef.current.play();
-      sessionStorage.setItem('user_interacted', 'true');
+      playerRef.current.play().catch((err) => {
+        console.warn('Play failed:', err);
+      });
+      setUserInteracted(true);
     }
   }
 
@@ -226,10 +236,9 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
           className="video-js vjs-default-skin vjs-big-play-centered"
           style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 2, objectFit: 'contain' }}
           tabIndex="0"
-          muted
+          playsInline
         />
       </div>
-      {!userInteracted && (
         <div
           onClick={() => {
             handleMuteButton()
@@ -238,7 +247,6 @@ const AdComponent = ({ videoData, onNormalAdCompleted }) => {
         >
           🔊
         </div>
-      )}
     </div>
   );
 };

@@ -223,7 +223,9 @@ const LiveStreamComponent = ({
     if (liveStreamUrl && videoRef.current && !playerRef.current) {
       playerRef.current = videojs(videoRef.current, {
         autoplay: true,
+        playsinline: true,
         controls: true,
+        muted: true,
         responsive: true,
         controlBar: {
           pictureInPictureToggle: false,
@@ -243,6 +245,8 @@ const LiveStreamComponent = ({
       });
 
       playerRef.current.ready(() => {
+        playerRef.current.muted(true);
+        playerRef.current.play();
         // Initialize MediaMelon when player is ready
         waitForMediaMelonPlugin(initializeMediaMelon);
       });

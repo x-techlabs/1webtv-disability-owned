@@ -79,7 +79,7 @@ LandingPage.propTypes = {
     bgVideo: PropTypes.string,
   }).isRequired,
   handlePageChange: PropTypes.func.isRequired,
-  landingPageButton: PropTypes.number.isRequired,
+  landingPageButton: PropTypes.number,
 };
 
 export default LandingPage;

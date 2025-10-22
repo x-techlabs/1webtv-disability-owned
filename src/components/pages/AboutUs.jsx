@@ -365,7 +365,7 @@ LandingPage.propTypes = {
     bgVideo: PropTypes.string,
   }).isRequired,
   handlePageChange: PropTypes.func.isRequired,
-  landingPageButton: PropTypes.func.isRequired,
+  landingPageButton: PropTypes.func,
 };
 
 export default LandingPage;

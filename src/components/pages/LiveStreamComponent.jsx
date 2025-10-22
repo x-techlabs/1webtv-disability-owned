@@ -59,7 +59,7 @@ const LiveStreamComponent = ({
       if (!mmvjsPlugin || mmvjsPlugin.getRegistrationStatus()) return;
 
       mmvjsPlugin.registerMMSmartStreaming(
-        "HBCUGOPlayer",
+        "DisabilityOwnedPlayer",
         process.env.REACT_APP_MEDIAMELON_CUSTOMER_ID,
         null,
         window.location.hostname,
@@ -67,8 +67,8 @@ const LiveStreamComponent = ({
         null
       );
 
-      mmvjsPlugin.reportPlayerInfo("HBCU GO", "ReactPlayer", "1.0.0");
-      mmvjsPlugin.reportAppInfo(appName || "HBCU GO", "1.0.0");
+      mmvjsPlugin.reportPlayerInfo("Disability Owned", "ReactPlayer", "1.0.0");
+      mmvjsPlugin.reportAppInfo(appName || "Disability Owned", "1.0.0");
       mmvjsPlugin.setDeviceInfo(navigator.userAgent);
       mmvjsPlugin.reportVideoQuality("HD");
 
@@ -84,12 +84,12 @@ const LiveStreamComponent = ({
         videoType: isLive ? "LIVE" : "VOD",
       };
 
-      mmvjsPlugin.initialize(
-        playerRef.current,
-        liveStreamUrl,
-        mmVideoAssetInfo,
-        isLive
-      );
+      // mmvjsPlugin.initialize(
+      //   playerRef.current,
+      //   liveStreamUrl,
+      //   mmVideoAssetInfo,
+      //   isLive
+      // );
       mediaMelonInitialized.current = true;
       // console.log("MediaMelon initialized successfully");
     } catch (error) {

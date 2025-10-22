@@ -72,7 +72,7 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
             if (!mmvjsPlugin || mmvjsPlugin.getRegistrationStatus()) return;
 
                 mmvjsPlugin.registerMMSmartStreaming(
-                    "HBCUGOPlayer",
+                    "DisabilityOwnedPlayer",
                     process.env.REACT_APP_MEDIAMELON_CUSTOMER_ID,
                     null,
                     window.location.hostname,
@@ -80,8 +80,8 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     null
                 );
 
-                mmvjsPlugin.reportPlayerInfo("HBCU GO", "ReactPlayer", "1.0.0");
-                mmvjsPlugin.reportAppInfo(appName || "HBCU GO", "1.0.0");
+                mmvjsPlugin.reportPlayerInfo("Disability Owned", "ReactPlayer", "1.0.0");
+                mmvjsPlugin.reportAppInfo(appName || "Disability Owned", "1.0.0");
                 mmvjsPlugin.setDeviceInfo(navigator.userAgent);
                 mmvjsPlugin.reportVideoQuality("HD");
 
@@ -102,12 +102,12 @@ const VideoJSPlayer = ({ id, videoData, resumeFrom, handlePlayerClose }) => {
                     },
                 };
 
-                mmvjsPlugin.initialize(
-                    playerIns.current,
-                    playerObj.videoUrl,
-                    mmVideoAssetInfo,
-                    isLive
-                );
+                // mmvjsPlugin.initialize(
+                //     playerIns.current,
+                //     playerObj.videoUrl,
+                //     mmVideoAssetInfo,
+                //     isLive
+                // );
                 // console.log("MediaMelon initialized successfully");
         } catch (error) {
             // console.error("MediaMelon SmartSight initialization failed", error);

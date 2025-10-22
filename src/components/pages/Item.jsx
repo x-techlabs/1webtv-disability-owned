@@ -65,7 +65,9 @@ const Item = ({
   isSeries,
   menuData,
   subMenuData,
-  gridView
+  gridView,
+  targetUrl,
+  target_new_page,
 }) => {
   const location = useLocation();
   const page_url = activePage ? activePage : localStorage.getItem('pageClick');
@@ -84,9 +86,11 @@ const Item = ({
   const optimizedPoster = `${isPortrait ? posterV : posterH}?width=800&format=webp`;
 
   const fallbackImage = (error, titleName) => {
-    const errorElement = window.document.getElementById(error.target.id);
-    if (error?.target) {
-      errorElement.outerHTML = `<img src="${isPortrait ? portrait_dummy_poster : landscape_dummy_poster}" alt="${titleName}" class="${isPortrait ? 'error-image-default-image portrait' : 'error-image-default-image landscape'}" />`;
+    const imgElement = error.currentTarget;
+    if (!imgElement) return;
+
+    if (imgElement) {
+      imgElement.outerHTML = `<img src="${isPortrait ? portrait_dummy_poster : landscape_dummy_poster}" alt="${titleName}" class="${isPortrait ? 'error-image-default-image portrait' : 'error-image-default-image landscape'}" />`;
       setImageFailed(true);
     }
     return error;
@@ -312,6 +316,7 @@ const Item = ({
 
         // Case 2: All others (EVENT On Now + MOVIES + VIDEO) → Link block
         return (
+          title ? (
           <Link
             to={`/${pageTitle}/${pageSubTitle}/${encodeURIComponent(title)}`}
             className={`media-element ${isPortrait ? "portrait" : "landscape"} prj-element`}
@@ -450,6 +455,26 @@ const Item = ({
               <p className="sub-title">{description}</p>
             )}
           </Link>
+          ) : (
+            <Link
+              key={id}
+              to={`${targetUrl}`}
+              {...(target_new_page === 1 ? { target: "_blank" } : {})}
+              className={`media-element ${
+              isPortrait ? 'portrait' : 'landscape'
+            } prj-element`}>
+              <div className='webtv_target_images'>
+                <div className="img-container">
+                  <img
+                    id={`target-image-h-v-${id}`}
+                    src={poster}
+                    alt={title}
+                    onError={(error) => fallbackImage(error, title)}
+                  />
+                </div>
+              </div>
+            </Link>
+          )
         );
       })()}
     </div>
@@ -458,7 +483,7 @@ const Item = ({
 
 Item.propTypes = {
   id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   videoId: PropTypes.number,
   description: PropTypes.string,
   shortDescription: PropTypes.string,

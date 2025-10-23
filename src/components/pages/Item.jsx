@@ -65,9 +65,7 @@ const Item = ({
   isSeries,
   menuData,
   subMenuData,
-  gridView,
-  targetUrl,
-  target_new_page,
+  gridView
 }) => {
   const location = useLocation();
   const page_url = activePage ? activePage : localStorage.getItem('pageClick');
@@ -316,7 +314,6 @@ const Item = ({
 
         // Case 2: All others (EVENT On Now + MOVIES + VIDEO) → Link block
         return (
-          title ? (
           <Link
             to={`/${pageTitle}/${pageSubTitle}/${encodeURIComponent(title)}`}
             className={`media-element ${isPortrait ? "portrait" : "landscape"} prj-element`}
@@ -455,26 +452,6 @@ const Item = ({
               <p className="sub-title">{description}</p>
             )}
           </Link>
-          ) : (
-            <Link
-              key={id}
-              to={`${targetUrl}`}
-              {...(target_new_page === 1 ? { target: "_blank" } : {})}
-              className={`media-element ${
-              isPortrait ? 'portrait' : 'landscape'
-            } prj-element`}>
-              <div className='webtv_target_images'>
-                <div className="img-container">
-                  <img
-                    id={`target-image-h-v-${id}`}
-                    src={poster}
-                    alt={title}
-                    onError={(error) => fallbackImage(error, title)}
-                  />
-                </div>
-              </div>
-            </Link>
-          )
         );
       })()}
     </div>

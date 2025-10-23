@@ -80,8 +80,8 @@ const HorizontalList = ({
           shortDescription: v.short_description || '',
           hlsUrl: v.hls_url,
           poster: v.poster,
-          posterH: v.poster_16_9 || v.poster,
-          posterV: v.poster_9_16 || v.poster,
+          posterH: v.poster_16_9,
+          posterV: v.poster_9_16,
           startTime: v.start_date_time || '',
           endTime: v.end_date_time || '',
           duration: Number(v.duration || 0),
@@ -290,8 +290,6 @@ const HorizontalList = ({
                       activePage={activePage}
                       activeSubPage={activeSubPage}
                       activeSubPageParent={activeSubPageParent}
-                      targetUrl={v.targetUrl || ''}
-                      target_new_page={v.target_new_page || 0}
                     />
                   </SwiperSlide>
                   <div className="extra-margin-div" />

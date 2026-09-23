@@ -99,7 +99,7 @@ const LandingPageData = {
           'Disability Owned featured original shows, educational video, webinars, inspiring profiles, and more. Watch FREE anytime on your favorite streaming device.',
       },
       {
-        question: 'Is Disability Owned Good For Everyone ',
+        question: 'Is Disability Owned Good For Everyone?',
         answer:
           'Disability Owned offer business education, information, and inspiration everyone can enjoy, even those without a disability or interest in being self-employed.',
       },
@@ -107,9 +107,7 @@ const LandingPageData = {
   },
   about_us: {
     heading: 'About Us',
-    // description: `Disability Owned is a FREE business streaming service for people with disabilities. Watch Disability Owned is available to watch on your laptop, Roku TV, Apple TV, Amazon Fire TV, iOS or Android devices. Boston Media, LLC creators and managers of Disability Owned, is a member of the National Disability Institute's Community Navigator Pilot Program (CNPP). NDI's CNPP is funded in part through a grant from the U.S. Small Business Administration.`,
-    // description: `Disability Owned is a FREE streaming business information service for people with disabilities. Disability Owned TV is available to watch on your computer, Roku TV, Apple TV, Amazon Fire TV, iOS or Android devices. Boston Media, LLC creators of Disability Owned TV operator, is a member of the National Disability Institute's (NDI) RSA-DIF program. NDI's RSA-DIF is funded in part through a grant from the U.S. Department of Education.`,
-    description: `Disability Owned is a FREE streaming business information service for people with disabilities. Disability Owned TV is available to watch on Roku TV, Apple TV, Amazon Fire TV, mobile devices, social media platforms, and www.disabilityown.com. Boston Media, LLC, Disability Owned TV operator, is a member of the National Disability Institute's Inclusive Ventures: 21st Century Strategies for Entrepreneurs with Disabilities project.`,
+    description: `Disability Owned is a FREE streaming business information service for people with disabilities. Disability Owned TV is available to watch on Roku TV, Apple TV, Amazon Fire TV, mobile devices, social media platforms, and www.disabilityowned.com. Boston Media, LLC, Disability Owned TV operator, is a member of National Disability Institute's Inclusive Ventures: 21st Century Strategies for Entrepreneurs with Disabilities project.`,
   },
   copyRight: 'Copyright © 2026 All rights reserved',
 };

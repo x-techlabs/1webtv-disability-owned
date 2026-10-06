@@ -55,6 +55,22 @@ export const searchData = async (query) => {
   return response;
 };
 
+export const getDetailData = async (query, params = {}) => {
+  const detailParams = new URLSearchParams();
+  if (Number(params.is_live) === 1) {
+    detailParams.set('is_live', '1');
+  }
+  const queryString = detailParams.toString();
+  const url = `${
+    process.env.REACT_APP_CHANNEL_DATA_JSON
+  }/detail/${query}${queryString ? `?${queryString}` : ''}`;
+
+
+  const jsonCall = await fetch(url);
+  const response = await jsonCall.json();
+  return response;
+};
+
 // Get Vast Url
 export const getVastUrl = async (params) => {
   const url = process.env.REACT_APP_VAST_BASE_URL;

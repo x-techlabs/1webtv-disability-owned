@@ -5,7 +5,7 @@ import { getUserVideoProgress, getLocalStorageData } from '../../utils/localCach
 
 import Loading from './Loading';
 import Player from './Player';
-import { getMenuDetails, searchData } from '../../services/channelData.service';
+import { getDetailData, getMenuDetails, searchData } from '../../services/channelData.service';
 import { useLocation } from 'react-router-dom';
 
 const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
@@ -34,7 +34,7 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
         const fetchData = async () => {
             const playlistId = getLocalStorageData('pageClick');
             try {
-                const response = await searchData(videoTitle);
+                const response = await getDetailData(videoTitle);
                 let rawVideos = [];
                 if (!response || !response.content || !(response.content.videos || response.content.movies || response.content.events)) {
                     rawVideos = response.content.series;
@@ -78,6 +78,7 @@ const FeaturedPlayerWrapper = ({ activePage, activeSubPage = null }) => {
                     source: v.source || '',
                     playDirectUrl: v.playDirectUrl || '',
                     liveVastUrl: v.liveVastUrl || '',
+                    is_live: v.is_live,
                     type: program_type,
                     content_type: v.content_type,
                     monetization_type: v.monetizationDetails?.type || "Free",

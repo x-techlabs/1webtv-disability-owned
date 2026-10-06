@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { addLocalStorageData } from '../../utils/localCache.util';
-import { getMenuDetails, searchData } from '../../services/channelData.service';
+import { getMenuDetails, searchData,getDetailData } from '../../services/channelData.service';
 import Loading from './Loading';
 import DetailPage from '../pages/DetailPage';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ const DetailPageWrapper = ({ activePage, menuData, activePageLayout, handlePageC
           addLocalStorageData('pageClick', activePage);
           try {
             const menuData = await getMenuDetails(activePage);
-            const decodedUrlTitle = decodeURIComponent(playlistCategoryTitle);
+            const decodedUrlTitle = playlistCategoryTitle;
             const matchingPlaylist = menuData?.content?.playlists?.find(
               (playlist) => playlist.title === decodedUrlTitle
             );
@@ -32,7 +32,7 @@ const DetailPageWrapper = ({ activePage, menuData, activePageLayout, handlePageC
               return;
             }
             const program_type = matchingPlaylist?.program_type ?? 'video';
-            const response = await searchData(videoTitleSlug, 'video');
+            const response = await getDetailData(videoTitleSlug, { is_live: window.location.search.includes('is_live=1') ? 1 : 0 });
             const rawVideos = response.content.videos || response.content.movies || response.content.events || [];
             const formattedVideos = rawVideos.map((v) => ({
               id: v._id,

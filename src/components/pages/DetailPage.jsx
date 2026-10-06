@@ -96,7 +96,7 @@ const DetailPage = ({
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('detailPageData')) || {};
-    const decodedTitle = decodeURIComponent(videoTitle);
+    const decodedTitle = videoTitle;
     const videoData = storedData.videos?.find(
       (video) => video.title.toLowerCase() === decodedTitle.toLowerCase()
     );
@@ -414,7 +414,7 @@ const DetailPage = ({
                 <div className="buttons">
                       {Number(currentProgress) > 0 && Number(detailPageData.duration) - Number(currentProgress) > 2 && (
                         <Link 
-                          to={`/watch/featured/${encodeURIComponent(detailPageData.title)}`}
+                          to={`/watch/featured/${detailPageData.id}${Number(detailPageData.is_live)==1?'?is_live=1':''}`}
                           id="resume-btn"
                           type="button"
                           className="play-btn prj-element"
@@ -432,7 +432,8 @@ const DetailPage = ({
                         </Link>
                       )}
                       <Link
-                        to={`/watch/featured/${encodeURIComponent(detailPageData.title)}`}
+                       to={`/watch/featured/${detailPageData.id}${Number(detailPageData.is_live)==1?'?is_live=1':''}`}
+
                         id="play-btn"
                         className={
                           currentProgress === 0

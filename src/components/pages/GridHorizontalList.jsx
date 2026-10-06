@@ -97,6 +97,7 @@ const GridHorizontalList = ({
                     source: v.source || '',
                     playDirectUrl: v.playDirectUrl || '',
                     liveVastUrl: v.liveVastUrl || '',
+                    is_live: v.is_live,
                     type,
                     isSeries: false,
                     monetization_type: v.monetizationDetails?.type || "Free",
@@ -256,6 +257,7 @@ const GridHorizontalList = ({
                                             source={v.source}
                                             playDirectUrl={v.playDirectUrl}
                                             liveVastUrl={v.liveVastUrl}
+                                            is_live={v.is_live}
                                             type={type}
                                             seriesCount
                                             isSeries={v.isSeries}

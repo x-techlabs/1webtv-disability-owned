@@ -81,6 +81,7 @@ const Grid = ({
           source: v.source || '',
           playDirectUrl: v.playDirectUrl || '',
           liveVastUrl: v.liveVastUrl || '',
+          is_live: v.is_live,
           type,
           isSeries: false,
           monetization_type:v.monetizationDetails?.type || "Free",
@@ -190,6 +191,7 @@ const Grid = ({
                 source={v.source}
                 playDirectUrl={v.playDirectUrl}
                 liveVastUrl={v.liveVastUrl}
+                is_live={v.is_live}
                 type={type}
                 menuData={menuData}
                 isSeries={v.isSeries}

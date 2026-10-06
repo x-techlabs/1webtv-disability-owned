@@ -370,7 +370,7 @@ const LiveStreamComponent = ({
                   video.type !== "external_link" ? (
                   <Link
                     key={video._id}
-                    to={`/${pageTitle}/${pageSubTitle}/${encodeURIComponent(video.title)}`}
+                    to={`/${pageTitle}/${pageSubTitle}/${video._id}${Number(video.is_live) === 1 ? '?is_live=1' : ''}`}
                     className={`media-element ${
                       isPortrait ? 'portrait' : 'landscape'
                     } prj-element`}>
@@ -379,7 +379,7 @@ const LiveStreamComponent = ({
                         <div className="overlay-box">
                           <div className="btns-group">
                             <Link
-                              to={`/watch/featured/${encodeURIComponent(video.title)}`}
+                             to={`/watch/featured/${video._id}${Number(video.is_live) === 1 ? '?is_live=1' : ''}`}
                               aria-label={`${video.title}`}  
                               className="btn"
                               data-focus-left="#resume-btn"

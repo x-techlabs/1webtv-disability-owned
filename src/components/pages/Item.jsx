@@ -42,6 +42,7 @@ const Item = ({
   source,
   playDirectUrl,
   liveVastUrl,
+  is_live,
   type,
   monetization_type,
   monetization_price,
@@ -315,7 +316,7 @@ const Item = ({
         // Case 2: All others (EVENT On Now + MOVIES + VIDEO) → Link block
         return (
           <Link
-            to={`/${pageTitle}/${pageSubTitle}/${encodeURIComponent(title)}`}
+            to={`/${pageTitle}/${pageSubTitle}/${videoId}${Number(is_live) === 1 ? '?is_live=1' : ''}`}
             className={`media-element ${isPortrait ? "portrait" : "landscape"} prj-element`}
             onClick={() =>
               handleShowDetailPage({
@@ -366,7 +367,8 @@ const Item = ({
               <div className="overlay-box">
                 <div className="btns-group">
                   <Link
-                    to={`/watch/featured/${encodeURIComponent(title)}`}
+                    to={`/watch/featured/${videoId}${Number(is_live)==1?'?is_live=1':''}`}
+
                     className="btn" type='button'
                     data-focus-left="#resume-btn"
                     data-focus-right={false}
